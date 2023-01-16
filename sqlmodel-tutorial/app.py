@@ -59,7 +59,7 @@ def create_heroes():
 
 def select_heroes():
     with Session(engine) as session:
-        statement = select(Hero, Team).join(Team)
+        statement = select(Hero, Team).join(Team,isouter=True)
         results = session.exec(statement)
         for hero, team in results:
             print("Hero:", hero, "Team:", team)
