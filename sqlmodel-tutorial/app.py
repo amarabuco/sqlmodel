@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlmodel import Field, Session, SQLModel, create_engine
+from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 class Hero(SQLModel, table= True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -28,9 +28,18 @@ def create_heroes():
         
         session.commit()
 
+def select_heroes():
+    with Session(engine) as session:
+        statement =  select(Hero)
+        results = session.exec(statement)
+        for hero in results:
+            print(hero)
+        
+
 def main():
     create_db_and_tables()
     create_heroes()
+    select_heroes()
     
 if __name__ == "__main__":
     main()
