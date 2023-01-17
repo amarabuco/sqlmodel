@@ -102,17 +102,21 @@ def create_heroes():
 
 def select_heroes():
     with Session(engine) as session:
-        statement = select(Hero, Team).join(Team,isouter=True)
-        results = session.exec(statement)
-        for hero, team in results:
-            print("Hero:", hero, "Team:", team)
-            
+        statement = select(Hero, Team).where(Hero.name == "Spider-boy")
+        result = session.exec(statement)
+        hero_spider_boy = result.one()
+        print(hero_spider_boy)
+        
+        statement = select(Team).where(Team.id == hero_spider_boy.team_id)
+        result = session.exec(statement)
+        team = result.first()
+        print("Spider-Boy's team:", team)
 
     
 def main():
     create_db_and_tables()
     create_heroes()
-    #select_heroes()
+    select_heroes()
     
 if __name__ == "__main__":
     main()
