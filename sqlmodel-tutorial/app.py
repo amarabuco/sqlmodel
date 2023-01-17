@@ -60,6 +60,12 @@ def create_heroes():
         hero_spider_boy.team_id = team_preventers.id
         session.add(hero_spider_boy)        
         session.commit()
+        
+        hero_spider_boy.team_id = None
+        session.add(hero_spider_boy)
+        session.commit()
+        session.refresh(hero_spider_boy)
+        print("No longer Preventer:", hero_spider_boy)
 
 def select_heroes():
     with Session(engine) as session:
@@ -73,7 +79,7 @@ def select_heroes():
 def main():
     create_db_and_tables()
     create_heroes()
-    select_heroes()
+    #select_heroes()
     
 if __name__ == "__main__":
     main()
