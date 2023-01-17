@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, select
 
@@ -63,54 +63,51 @@ def create_heroes():
         session.refresh(hero_spider_boy)
         print("Updated hero:", hero_spider_boy)
         
-        hero_spider_boy.team_id = None
-        session.add(hero_spider_boy)
-        session.commit()
-        session.refresh(hero_spider_boy)
-        print("No longer Preventer:", hero_spider_boy)
+        # hero_spider_boy.team_id = None
+        # session.add(hero_spider_boy)
+        # session.commit()
+        # session.refresh(hero_spider_boy)
+        # print("No longer Preventer:", hero_spider_boy)
         
-        hero_black_lion = Hero(name="Black Lion", secret_name="Trevor Challa", age=35)
-        hero_sure_e = Hero(name="Princess Sure-E", secret_name="Sure-E")
-        team_wakaland = Team(
-            name="Wakaland",
-            headquarters="Wakaland Capital City",
-            heroes=[hero_black_lion, hero_sure_e],
-        )
-        session.add(team_wakaland)
-        session.commit()
-        session.refresh(team_wakaland)
-        print("Team Wakaland:", team_wakaland)
+        # hero_black_lion = Hero(name="Black Lion", secret_name="Trevor Challa", age=35)
+        # hero_sure_e = Hero(name="Princess Sure-E", secret_name="Sure-E")
+        # team_wakaland = Team(
+        #     name="Wakaland",
+        #     headquarters="Wakaland Capital City",
+        #     heroes=[hero_black_lion, hero_sure_e],
+        # )
+        # session.add(team_wakaland)
+        # session.commit()
+        # session.refresh(team_wakaland)
+        # print("Team Wakaland:", team_wakaland)
         
-        hero_tarantula = Hero(name="Tarantula", secret_name="Natalia Roman-on", age=32)
-        hero_dr_weird = Hero(name="Dr. Weird", secret_name="Steve Weird", age=36)
-        hero_cap = Hero(
-            name="Captain North America", secret_name="Esteban Rogelios", age=93
-        )
+        # hero_tarantula = Hero(name="Tarantula", secret_name="Natalia Roman-on", age=32)
+        # hero_dr_weird = Hero(name="Dr. Weird", secret_name="Steve Weird", age=36)
+        # hero_cap = Hero(
+        #     name="Captain North America", secret_name="Esteban Rogelios", age=93
+        # )
 
-        team_preventers.heroes.append(hero_tarantula)
-        team_preventers.heroes.append(hero_dr_weird)
-        team_preventers.heroes.append(hero_cap)
-        session.add(team_preventers)
-        session.commit()
-        session.refresh(hero_tarantula)
-        session.refresh(hero_dr_weird)
-        session.refresh(hero_cap)
-        print("Preventers new hero:", hero_tarantula)
-        print("Preventers new hero:", hero_dr_weird)
-        print("Preventers new hero:", hero_cap)
+        # team_preventers.heroes.append(hero_tarantula)
+        # team_preventers.heroes.append(hero_dr_weird)
+        # team_preventers.heroes.append(hero_cap)
+        # session.add(team_preventers)
+        # session.commit()
+        # session.refresh(hero_tarantula)
+        # session.refresh(hero_dr_weird)
+        # session.refresh(hero_cap)
+        # print("Preventers new hero:", hero_tarantula)
+        # print("Preventers new hero:", hero_dr_weird)
+        # print("Preventers new hero:", hero_cap)
 
 
 def select_heroes():
     with Session(engine) as session:
-        statement = select(Hero, Team).where(Hero.name == "Spider-boy")
+        statement = select(Hero).where(Hero.name == "Spider-Boy")
         result = session.exec(statement)
         hero_spider_boy = result.one()
         print(hero_spider_boy)
         
-        statement = select(Team).where(Team.id == hero_spider_boy.team_id)
-        result = session.exec(statement)
-        team = result.first()
-        print("Spider-Boy's team:", team)
+        print("Spider-Boy's team again:", hero_spider_boy.team)
 
     
 def main():
