@@ -69,6 +69,17 @@ def create_heroes():
         session.refresh(hero_spider_boy)
         print("No longer Preventer:", hero_spider_boy)
         
+        hero_black_lion = Hero(name="Black Lion", secret_name="Trevor Challa", age=35)
+        hero_sure_e = Hero(name="Princess Sure-E", secret_name="Sure-E")
+        team_wakaland = Team(
+            name="Wakaland",
+            headquarters="Wakaland Capital City",
+            heroes=[hero_black_lion, hero_sure_e],
+        )
+        session.add(team_wakaland)
+        session.commit()
+        session.refresh(team_wakaland)
+        print("Team Wakaland:", team_wakaland)
         
         
 
