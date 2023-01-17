@@ -1,11 +1,13 @@
 from typing import Optional
 
-from sqlmodel import Field, Session, SQLModel, create_engine, select
+from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, select
 
 class Team(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(index=True)
     headquarters: str
+    
+    heroes: List["Hero"] = Relationship(back_populates="team")
 
 
 class Hero(SQLModel, table= True):
@@ -15,6 +17,7 @@ class Hero(SQLModel, table= True):
     age: Optional[int] = None
     
     team_id: Optional[int] = Field(default=None, foreign_key="team.id")
+    team: Optional[Team] = Relationship(back_populates="heroes")
     
     
 sqlite_file_name = "database.db"
@@ -30,18 +33,15 @@ def create_heroes():
     with Session(engine) as session:
         team_preventers = Team(name="Preventers", headquarters="Sharp Tower")
         team_z_force = Team(name="Z-Force", headquarters="Sister Margaret’s Bar")
-        session.add(team_preventers)
-        session.add(team_z_force)
-        session.commit()
         
         hero_deadpond = Hero(
-            name="Deadpond", secret_name="Dive Wilson", team_id=team_z_force.id
+            name="Deadpond", secret_name="Dive Wilson", team=team_z_force
         )
         hero_rusty_man = Hero(
             name="Rusty-Man",
             secret_name="Tommy Sharp",
             age=48,
-            team_id=team_preventers.id,
+            team=team_preventers
         )
         hero_spider_boy = Hero(name="Spider-Boy", secret_name="Pedro Parqueador")
         session.add(hero_deadpond)
@@ -57,15 +57,21 @@ def create_heroes():
         print("Created hero:", hero_rusty_man)
         print("Created hero:", hero_spider_boy)
         
-        hero_spider_boy.team_id = team_preventers.id
+        hero_spider_boy.team = team_preventers
         session.add(hero_spider_boy)        
         session.commit()
+        session.refresh(hero_spider_boy)
+        print("Updated hero:", hero_spider_boy)
         
         hero_spider_boy.team_id = None
         session.add(hero_spider_boy)
         session.commit()
         session.refresh(hero_spider_boy)
         print("No longer Preventer:", hero_spider_boy)
+        
+        
+        
+
 
 def select_heroes():
     with Session(engine) as session:
