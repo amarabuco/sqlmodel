@@ -109,11 +109,20 @@ def select_heroes():
         
         print("Spider-Boy's team again:", hero_spider_boy.team)
 
+
+def list_heroes():
+    with Session(engine) as session:
+        statement = select(Team).where(Team.name == "Preventers")
+        result = session.exec(statement)
+        team_preventers = result.one()
+
+        print("Preventers heroes:", team_preventers.heroes)
     
 def main():
     create_db_and_tables()
     create_heroes()
     select_heroes()
+    list_heroes()
     
 if __name__ == "__main__":
     main()
